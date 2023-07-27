@@ -4,9 +4,13 @@ on: [push]
 jobs:
     run-kfp-cicd:
         runs-on: ubuntu-latest
-        env:
-            clone_url: ${{ github.repositoryUrl }}
         steps:
+            - id: auth
+              uses: google-github-actions/auth@v1.1.1
+              with:
+                workload_identity_provider: 'projects/524957214539/locations/global/workloadIdentityPools/gh-tf-pool/providers/gh-tf-provider'
+                service_account: 'gh-tf-wip@learn-experiment.iam.gserviceaccount.com'
+
             - uses: actions/checkout@v3
 
             - name: Setup python
@@ -41,9 +45,17 @@ jobs:
             - name: Terraform plan
               id: tf_plan
               run: terraform plan -no-color
+              env:
+                TF_VAR_gh_username: ${{ github.actor }}
+                TF_VAR_gh_repo_name: ${{ github.repository }}
+                TF_VAR_clone_url: ${{ github.repositoryUrl }}
+                TF_VAR_gh_token: ${{ secrets.GITHUB_TOKEN }} 
             
             - name: Terraform apply
               id: tf_apply
               run: terraform apply
               env:
+                TF_VAR_gh_username: ${{ github.actor }}
+                TF_VAR_gh_repo_name: ${{ github.repository }}
+                TF_VAR_clone_url: ${{ github.repositoryUrl }}
                 TF_VAR_gh_token: ${{ secrets.GITHUB_TOKEN }}

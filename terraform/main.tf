@@ -1,4 +1,8 @@
 terraform {
+  backend "gcs" {
+    bucket = "learn-experiment-tf-state"
+    prefix = "terraform/state"
+  }
   required_providers {
     google = {
       source  = "hashicorp/google"
