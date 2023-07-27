@@ -15,7 +15,7 @@ jobs:
               name: Authenticate Google Cloud
               uses: google-github-actions/auth@v1.1.1
               with:
-                workload_identity_provider: 'projects/524957214539/locations/global/workloadIdentityPools/gh-tf-pool/providers/gh-tf-provider'
+                workload_identity_provider: 'projects/524957214539/locations/global/workloadIdentityPools/gh-tf-wif-pool/providers/gh-tf-wif-provider'
                 service_account: 'gh-tf-wip@learn-experiment.iam.gserviceaccount.com'
 
             - name: Setup python
