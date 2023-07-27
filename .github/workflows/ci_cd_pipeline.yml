@@ -1,0 +1,49 @@
+name: ci_cd_pipeline
+# run-name: ""
+on: [push]
+jobs:
+    run-kfp-cicd:
+        runs-on: ubuntu-latest
+        env:
+            clone_url: ${{ github.repositoryUrl }}
+        steps:
+            - uses: actions/checkout@v3
+
+            - name: Setup python
+              uses: actions/setup-python@v4
+            
+            - name: Install Dependencies
+              run: |
+                python -m pip install --upgrade pip
+                pip install pytest
+                cd kf_pipeline
+                if [-f requirements.txt]; then pip install -r requirements.txt; fi
+            
+            - name: Run tests
+              run: pytest
+            
+            - uses: hashicorp/setup-terraform@v2
+              with:
+                terraform_version: 1.5.3
+            
+            - name: Terraform init
+              id: tf_init
+              run: terraform init
+              
+            - name: Terraform fmt
+              id: tf_fmt
+              run: terraform fmt -check
+            
+            - name: Terraform validate
+              id: tf_val
+              run: terraform validate
+            
+            - name: Terraform plan
+              id: tf_plan
+              run: terraform plan -no-color
+            
+            - name: Terraform apply
+              id: tf_apply
+              run: terraform apply
+              env:
+                TF_VAR_gh_token: ${{ secrets.GITHUB_TOKEN }}
