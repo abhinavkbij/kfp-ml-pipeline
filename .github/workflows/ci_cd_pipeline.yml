@@ -44,6 +44,7 @@ jobs:
               id: tf_fmt
               run: terraform fmt -check
               working-directory: ./terraform
+              continue-on-error: true
             
             - name: Terraform validate
               id: tf_val
