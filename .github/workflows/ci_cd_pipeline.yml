@@ -63,7 +63,7 @@ jobs:
             
             - name: Terraform apply
               id: tf_apply
-              run: terraform apply
+              run: terraform apply -auto-approve
               working-directory: ./terraform
               env:
                 TF_VAR_gh_username: ${{ github.actor }}
