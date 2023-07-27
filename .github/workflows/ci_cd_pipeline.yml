@@ -4,6 +4,9 @@ on: [push]
 jobs:
     run-kfp-cicd:
         runs-on: ubuntu-latest
+        permissions:
+            id-token: write
+            contents: read
         steps:
             - id: auth
               uses: google-github-actions/auth@v1.1.1
