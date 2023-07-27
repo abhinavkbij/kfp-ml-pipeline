@@ -34,25 +34,26 @@ jobs:
             - uses: hashicorp/setup-terraform@v2
               with:
                 terraform_version: 1.5.3
-            
-            - name: Navigate to terraform directory
-              run: cd ${GITHUB_WORKSPACE}/terraform
 
             - name: Terraform init
               id: tf_init
               run: terraform init
+              working-directory: ${GITHUB_WORKSPACE}/terraform
               
             - name: Terraform fmt
               id: tf_fmt
               run: terraform fmt -check
+              working-directory: ${GITHUB_WORKSPACE}/terraform
             
             - name: Terraform validate
               id: tf_val
               run: terraform validate
+              working-directory: ${GITHUB_WORKSPACE}/terraform
             
             - name: Terraform plan
               id: tf_plan
               run: terraform plan -no-color
+              working-directory: ${GITHUB_WORKSPACE}/terraform
               env:
                 TF_VAR_gh_username: ${{ github.actor }}
                 TF_VAR_gh_repo_name: ${{ github.repository }}
@@ -62,6 +63,7 @@ jobs:
             - name: Terraform apply
               id: tf_apply
               run: terraform apply
+              working-directory: ${GITHUB_WORKSPACE}/terraform
               env:
                 TF_VAR_gh_username: ${{ github.actor }}
                 TF_VAR_gh_repo_name: ${{ github.repository }}
