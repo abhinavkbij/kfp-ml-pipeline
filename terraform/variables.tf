@@ -25,7 +25,6 @@ variable "ip_cidr_range" {
 variable "clone_url" {
     type        = string
     description = ""
-    default     = "https://github.com/abhinavkbij/kfp-ml-pipeline.git"
     sensitive   = true
 }
 

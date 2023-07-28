@@ -92,7 +92,7 @@ resource "google_compute_instance" "spot_vm_instance" {
     elif [ pip -V &> /dev/null ]; then
       pip install -r requirements.txt
     else
-      echo "Nothing!!"
+      sudo apt install python3-pip -y && pip install -r requirements.txt
   fi
   EOT
 }

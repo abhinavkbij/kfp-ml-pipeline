@@ -7,6 +7,12 @@ jobs:
         permissions:
             id-token: write
             contents: read
+        env:
+            PROJECT_NUMBER: ${{ secrets.WIF_PROJECT_NUMBER }}
+            POOL_ID: ${{ secrets.POOL_ID }}
+            PROVIDER_ID: ${{ secrets.PROVIDER_ID }}
+            PROJECT_ID: ${{ secrets.PROJECT_ID }}
+            SA_NAME: ${{ secrets.SA_NAME }}
         steps:
             - name: Checkout
               uses: actions/checkout@v3
@@ -15,8 +21,8 @@ jobs:
               name: Authenticate Google Cloud
               uses: google-github-actions/auth@v1.1.1
               with:
-                workload_identity_provider: 'projects/524957214539/locations/global/workloadIdentityPools/gh-tf-wif-pool/providers/gh-tf-wif-provider'
-                service_account: 'gh-tf-wip@learn-experiment.iam.gserviceaccount.com'
+                workload_identity_provider: 'projects/${{ env.PROJECT_NUMBER }}/locations/global/workloadIdentityPools/${{ env.POOL_ID }}/providers/${{ env.PROVIDER_ID }}'
+                service_account: '${{ env.SA_NAME }}@${{ env.PROJECT_ID }}.iam.gserviceaccount.com'
 
             - name: Setup python
               uses: actions/setup-python@v4
