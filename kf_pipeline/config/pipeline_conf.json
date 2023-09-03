@@ -1,0 +1,35 @@
+{
+    "components": {
+        "data_ingestion" : {
+            "bq_path" : "learn-experiment.mydataset.mytable"
+        },
+        "preprocessing" : {
+            
+        },
+        "feature_eng" : {
+
+        },
+        "model_selection" : {
+
+        },
+        "hpt_tuning" : {
+
+        },
+        "model_comparison" : {
+
+        },
+        "deployment" :  {
+            
+        },
+        "monitoring" : {
+
+        }
+    },
+    "pipeline" : {
+        "project_id" : "learn-experiment",
+        "pipeline_root_local" : "/tmp/kfp/pipelines/root/",
+        "package_path_local" : "/tmp/kfp/pipelines/templates/",
+        "pipeline_root_gcs" : "gs://learn-experiment-tf-state/pipelines/root/",
+        "package_path_gcs" : "gs://learn-experiment-tf-state/pipelines/templates/"
+    }
+}

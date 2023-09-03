@@ -69,7 +69,9 @@ resource "google_compute_instance" "spot_vm_instance" {
   sudo apt update
   if [ ! python3 -V &> /dev/null ]
   then 
-    sudo apt install build-essential libssl-dev libffi-dev python3-dev python3-pip -y
+    sudo apt install build-essential libssl-dev libffi-dev python3-dev python3-pip python3-venv -y
+  else
+    sudo apt install python3-venv python3-pip -y
   fi
   sudo apt install git -y
   CLONE_URL=${var.clone_url}
@@ -86,14 +88,11 @@ resource "google_compute_instance" "spot_vm_instance" {
     REPO_URL="https://$GH_USERNAME:$GH_TOKEN$CR_PARTIAL_URL"
     git clone $REPO_URL
   fi
-  cd kfp-ml-pipeline/kf_pipeline
-  if [ pip3 -V &> /dev/null ]; then
-    pip3 install -r requirements.txt
-    elif [ pip -V &> /dev/null ]; then
-      pip install -r requirements.txt
-    else
-      sudo apt install python3-pip -y && pip install -r requirements.txt
-  fi
+  cd kfp-ml-pipeline/kf_pipeline && \
+  envDir="/tmp/kfpEnv" && \
+  python3 -m venv $envDir && \
+  "$envDir/bin/pip3" install -r requirements.txt && \
+  "$envDir/bin/python3" pipeline.py
   EOT
 }
 

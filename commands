@@ -1,0 +1,34 @@
+steps:
+- id: auth
+  uses: google-github-actions/auth@v0.4.0
+  with:
+    workload_identity_provider: 'projects//locations/global/workloadIdentityPools/gh-tf-pool/providers/gh-tf-provider'
+    service_account: 'my-service-account@my-project.iam.gserviceaccount.com'
+
+- id: get-gke-credentials
+  uses: google-github-actions/get-gke-credentials@v0.4.0
+  with:
+    cluster_name: my-cluster
+    location: us-central1-a
+
+- id: get-pods
+  run: kubectl get pods
+
+
+  gcloud iam workload-identity-pools create "gh-tf-wif-pool" \
+  --project="learn-experiment" \
+  --location="global" \
+  --display-name="tf test pool"
+
+  gcloud iam workload-identity-pools providers create-oidc "gh-tf-wif-provider" \
+  --project="learn-experiment" \
+  --location="global" \
+  --workload-identity-pool="gh-tf-wif-pool" \
+  --display-name="tf test provider" \
+  --attribute-mapping="google.subject=assertion.sub,attribute.repository=assertion.repository,attribute.repository_owner=assertion.repository_owner" \
+  --issuer-uri="https://token.actions.githubusercontent.com"
+
+  gcloud iam service-accounts add-iam-policy-binding "gh-tf-wip@learn-experiment.iam.gserviceaccount.com" \
+  --project="learn-experiment" \
+  --role="roles/iam.workloadIdentityUser" \
+  --member="principalSet://iam.googleapis.com/projects/524957214539/locations/global/workloadIdentityPools/gh-tf-pool/attribute.repository/kfp-ml-pipeline/attribute.repository_owner/abhinavkbij"
